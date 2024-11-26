@@ -156,7 +156,7 @@ def llenar_profesores():
     contenido = ''
     while i < 100:
         id = i + 1
-        nombre = fake.name()
+        nombre = fake.first_name()
         apellidos = fake.last_name()
         direccion = fake.address()
         foto = fake.image_url()
@@ -255,7 +255,7 @@ def llenar_estudiantes():
     contenido = ''
     while i < 1000:
         id = 1 +i
-        nombre = fake.name()
+        nombre = fake.first_name()
         apellidos = fake.last_name()
         direccion = fake.address()
         foto = fake.image_url()
@@ -265,7 +265,7 @@ def llenar_estudiantes():
         correo = str(codigo_institucional) + '@aloe.ulima.edu.pe'
         telefono = fake.phone_number()
         dni = random.randint(70000000,79999999)
-        tmp = f"INSERT INTO estudiantes (id, nombre, apellidos, direccion, foto, codigo_institucional, usuario_id, sexo_id, correo, telefono, dni) VALUES ({id}, '{nombre}', '{apellidos}', '{direccion}', '{foto}', {codigo_institucional}, {id_usuario}, {sexo_id}, '{correo}', '{telefono}', {dni});\n"
+        tmp = f"INSERT INTO estudiantes (id, nombre, apellidos, direccion, foto, codigo_institucional, usuario_id, sexo_id, correo, telefono, dni) VALUES ({id}, '{nombre}', '{apellidos}', '{direccion}', '{foto}', {codigo_institucional}, {usuario_id}, {sexo_id}, '{correo}', '{telefono}', {dni});\n"
         contenido= contenido+tmp
         i = i + 1
     with open('inserts_estudiantes.sql', 'w', encoding='utf-8') as archivo:
@@ -298,7 +298,7 @@ def llenar_estudiantes_secciones():
     with open('inserts_estudiantes_secciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
-
+estdiantes_por_grupo = {}
 
 def llenar_estudiantes_seccion_grupo():
     count_estudiantes_seccion = 1000
@@ -317,6 +317,7 @@ def llenar_estudiantes_seccion_grupo():
             if tmp not in lista_estudiantes_seccion_ids:
                 lista_estudiantes_seccion_ids.append(tmp)
             k += 1
+        estdiantes_por_grupo[i+1] = lista_estudiantes_seccion_ids
         for estudiante_seccion_id in lista_estudiantes_seccion_ids:
             grupo_id = i + 1
             tmp = f"INSERT INTO estudiantes_seccion_grupo (id, estudiante_seccion_id,grupo_id) VALUES ({id},{estudiante_seccion_id},  {grupo_id});\n"
@@ -327,21 +328,19 @@ def llenar_estudiantes_seccion_grupo():
         archivo.write(contenido)
 
 
+
+
 def llenar_calificaciones_grupales():
-    count_estudiantes_seccion_grupo= 100
-    count_actividades = len(idactividadesgrupales)-1
-    i = 0
+    count_estudiantes_seccion_grupo = 100
+    count_actividades = len(idactividadesgrupales)
     contenido = ''
     id = 1
+    i=0
     while i < count_actividades:
+        grupo_id = (i % len(estdiantes_por_grupo)) + 1
         n_estudiantes = 4
         k = 0
-        lista_estudiantes_seccion_grupo_ids = []
-        while k < n_estudiantes:
-            tmp = random.randint(1, count_estudiantes_seccion_grupo)
-            if tmp not in lista_estudiantes_seccion_grupo_ids:
-                lista_estudiantes_seccion_grupo_ids.append(tmp)
-            k += 1
+        lista_estudiantes_seccion_grupo_ids = estdiantes_por_grupo[grupo_id]
         for estudiante_seccion_grupo_id in lista_estudiantes_seccion_grupo_ids:
             actividad_id = idactividadesgrupales[i]
             nota = random.randint(0, 20)
@@ -359,16 +358,12 @@ def llenar_calificaciones_individuales():
     contenido = ''
     id = 1
     while i < count_actividades:
-        n_estudiantes = random.randint(1, 1)
+        seccion_id = (i % len(estudiantes_por_seccion)) + 1
+        estudiantes_disponibles = estudiantes_por_seccion[seccion_id]
         k = 0
         lista_estudiantes_seccion_ids = []
-        while k < n_estudiantes:
-            tmp = random.randint(1, count_estudiantes_seccion)
-            if tmp not in lista_estudiantes_seccion_ids:
-                lista_estudiantes_seccion_ids.append(tmp)
-            k += 1
-        for estudiante_seccion_id in lista_estudiantes_seccion_ids:
-            actividad_id = idactividadesgrupales[i]
+        for estudiante_seccion_id in estudiantes_disponibles:
+            actividad_id = idactividadesindividuales[i]
             nota = random.randint(0, 20)
             tmp = f"INSERT INTO calificaciones_individuales (id, estudiante_seccion_id, actividad_id, nota) VALUES ({id}, {estudiante_seccion_id}, {actividad_id}, {nota});\n"
             contenido += tmp
@@ -385,7 +380,7 @@ def llenar_anuncios():
         autor = fake.name_nonbinary()
         redacto = fake.sentence()
         seccion_id = random.randint(1,100)
-        fecha = fake.date_time_between(start_date=periodosinicioporseccion[seccion_id+1], end_date=periodosfinalporseccion[seccion_id+1])
+        fecha = fake.date_time_between(start_date=datetime(2020, 1, 1), end_date='now')
         tmp = f"INSERT INTO anuncios (id, autor, fecha, contenido, seccion_id) VALUES ({id}, '{autor}', '{fecha}', '{redacto}', {seccion_id});\n"
         contenido= contenido+tmp
         i = i + 1
@@ -435,8 +430,7 @@ def llenar_contenidos_curso():
     contenido = ''
     while id < 100:
         id = id + 1
-        seccion_id = random.randint(1, 100)
-        
+        seccion_id = id+1
         zoom = "https://zoom.us/join?confno=" + str(random.randint(1000000000, 9999999999))
         tmp = f"INSERT INTO contenidos_curso (id, seccion_id, zoom) VALUES ({id}, {seccion_id}, '{zoom}');\n"
         contenido += tmp
@@ -497,24 +491,27 @@ def llenar_estudiantes_organizaciones():
     with open('inserts_estudiantes_organizaciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
-#llenar_sexos()
-#llenar_usuarios()
-#llenar_cursos()
-#llenar_periodos()
-#llenar_profesores()
-#llenar_secciones()
-#llenar_grupos()
-#llenar_organizaciones()
-#llenar_actividades()
-#llenar_estudiantes()
-#llenar_estudiantes_secciones()
-#llenar_estudiantes_seccion_grupo()
-#llenar_calificaciones()
-#llenar_anuncios()
-#llenar_mensajes()
-#llenar_destinatarios_mensajes()
-#llenar_contenidos_curso()
-#llenar_informacion_recursos_comunes()
-#llenar_documentos()
+llenar_sexos()
+llenar_usuarios()
+llenar_cursos()
+llenar_periodos()
+llenar_profesores()
+llenar_secciones()
+llenar_grupos()
+llenar_organizaciones()
+llenar_actividades()
+llenar_estudiantes()
+llenar_estudiantes_secciones()
+llenar_estudiantes_seccion_grupo()
+llenar_actividades_tipo()
+llenar_calificaciones_grupales()
+llenar_calificaciones_individuales()
+
+llenar_anuncios()
+llenar_mensajes()
+llenar_destinatarios_mensajes()
+llenar_contenidos_curso()
+llenar_informacion_recursos_comunes()
+llenar_documentos()
 llenar_estudiantes_organizaciones()
 
