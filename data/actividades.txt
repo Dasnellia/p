@@ -1,0 +1,199 @@
+5036::Revisar correos electrónicos
+
+3207::Llamar a clientes
+
+8858::Redactar informe semanal
+
+7837::Preparar presentación
+
+6059::Actualizar base de datos
+
+9188::Planificar reunión de equipo
+
+2580::Hacer seguimiento de proyectos
+
+8754::Revisar presupuesto
+
+4713::Crear contenido para redes sociales
+
+5341::Analizar datos de ventas
+
+4562::Programar citas
+
+3546::Realizar investigación de mercado
+
+1960::Desarrollar estrategia de marketing
+
+6474::Coordinar eventos
+
+6510::Diseñar material publicitario
+
+6770::Revisar contratos
+
+4980::Actualizar sitio web
+
+9000::Gestionar inventario
+
+4325::Realizar encuestas
+
+9491::Preparar propuestas
+
+1387::Revisar políticas de la empresa
+
+3659::Capacitar a nuevos empleados
+
+5295::Organizar archivos
+
+2886::Hacer llamadas de seguimiento
+
+5252::Revisar informes financieros
+
+4938::Planificar campañas publicitarias
+
+7841::Crear informes de rendimiento
+
+2765::Gestionar cuentas de redes sociales
+
+3818::Desarrollar nuevos productos
+
+8926::Revisar políticas de seguridad
+
+1211::Coordinar con proveedores
+
+6153::Realizar auditorías internas
+
+9660::Preparar material de capacitación
+
+7107::Revisar solicitudes de clientes
+
+9494::Actualizar manuales de procedimientos
+
+2544::Realizar análisis de competencia
+
+1926::Planificar actividades de equipo
+
+7786::Revisar y aprobar facturas
+
+4232::Gestionar proyectos de TI
+
+7829::Desarrollar aplicaciones móviles
+
+8026::Realizar pruebas de software
+
+3354::Crear campañas de correo electrónico
+
+7834::Revisar políticas de privacidad
+
+9254::Gestionar relaciones con inversores
+
+9899::Desarrollar planes de negocio
+
+8060::Realizar análisis de riesgos
+
+3008::Preparar informes de sostenibilidad
+
+4249::Coordinar actividades de voluntariado
+
+2759::Revisar políticas de recursos humanos
+
+6902::Desarrollar programas de bienestar
+
+6663::Realizar análisis de datos
+
+3412::Crear presentaciones de ventas
+
+2103::Revisar políticas de cumplimiento
+
+8379::Gestionar relaciones con clientes
+
+5715::Desarrollar estrategias de retención
+
+6815::Realizar análisis de mercado
+
+4444::Preparar informes de auditoría
+
+8171::Coordinar actividades de formación
+
+6941::Revisar políticas de seguridad de la información
+
+9588::Gestionar proyectos de desarrollo
+
+5702::Desarrollar estrategias de innovación
+
+1574::Realizar análisis de tendencias
+
+3543::Crear informes de impacto social
+
+5705::Revisar políticas de sostenibilidad
+
+2688::Gestionar relaciones con medios de comunicación
+
+1359::Desarrollar estrategias de comunicación
+
+2121::Realizar análisis de datos financieros
+
+1812::Preparar informes de gestión
+
+3774::Coordinar actividades de investigación
+
+6430::Revisar políticas de calidad
+
+6302::Gestionar proyectos de investigación
+
+4096::Desarrollar estrategias de crecimiento
+
+8532::Realizar análisis de datos de clientes
+
+9476::Crear informes de rendimiento financiero
+
+3498::Revisar políticas de gestión de riesgos
+
+9903::Gestionar relaciones con socios estratégicos
+
+4133::Desarrollar estrategias de expansión
+
+8876::Realizar análisis de datos de mercado
+
+3534::Preparar informes de impacto ambiental
+
+7778::Coordinar actividades de desarrollo profesional
+
+2593::Revisar políticas de gestión de proyectos
+
+4450::Gestionar proyectos de innovación
+
+2541::Desarrollar estrategias de sostenibilidad
+
+8425::Realizar análisis de datos de ventas
+
+8859::Crear informes de impacto económico
+
+6565::Revisar políticas de gestión de calidad
+
+4911::Gestionar relaciones con stakeholders
+
+5992::Desarrollar estrategias de responsabilidad social
+
+9942::Realizar análisis de datos de rendimiento
+
+7178::Preparar informes de gestión de riesgos
+
+4325::Coordinar actividades de desarrollo de productos
+
+5648::Revisar políticas de gestión de recursos
+
+3897::Gestionar proyectos de responsabilidad social
+
+6853::Desarrollar estrategias de gestión de talento
+
+8809::Realizar análisis de datos de mercado
+
+3329::Crear informes de impacto social
+
+1498::Revisar políticas de gestión de sostenibilidad
+
+1747::Gestionar relaciones con comunidades
+
+8934::Desarrollar estrategias de gestión de cambio
+
+7658::Realizar análisis de datos de impacto

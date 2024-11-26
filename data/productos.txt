@@ -1,0 +1,32 @@
+1::Teléfonos::1
+2::computadoras::1
+3::televisores::1
+4::audio::1
+5::Prendas de vestir::2
+6::calzado::2
+7::joyería::2
+8::Comidas enlatadas::3
+9::snacks::3
+10::bebidas::3
+11::Muebles::4
+12::decoración::4
+13::herramientas de jardín::4
+14::Cosméticos::5
+15::productos de cuidado personal::5
+16::suplementos::5
+17::Juguetes educativos::6
+18::juegos de mesa::6
+19::videojuegos::6
+20::Equipamiento deportivo::7
+21::ropa deportiva::7
+22::accesorios de camping::7
+23::Accesorios para autos::8
+24::herramientas::8
+25::productos de mantenimiento::8
+26::Libros::9
+27::revistas::9
+28::música::9
+29::películas::9
+30::Software::10
+31::aplicaciones::10
+32::servicios en la nube::10
