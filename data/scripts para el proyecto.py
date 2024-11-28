@@ -5,91 +5,6 @@ from datetime import timedelta
 
 fake = Faker() # Faker fake = new Faker();
 
-def llenar_productos():
-    i = 1
-    contenido = ''
-    with open('productos.txt', mode='r', newline='', encoding='utf-8') as archivo:
-        for fila in archivo:
-            fila = fila.strip().split('::')
-            id = fila[0]
-            nombre = fila[1].capitalize()
-            categoria_id = fila[2]
-            descripcion = fake.paragraph()
-            codigo = random.randint(1000,5000)
-            valor_unitario = random.randint(5,200)/100.0
-            tmp = f"INSERT INTO productos (id, nombre, codigo, descripcion, valor_unitario, categoria_id) VALUES ({id}, '{nombre}', {codigo}, '{descripcion}', {valor_unitario}, {categoria_id});\n"
-            contenido = contenido + tmp
-    with open('inserts_productos.sql', 'w', encoding='utf-8') as archivo:
-        archivo.write(contenido)
-
-
-
-
-#def llenar_clientes():
-    i = 0
-    contenido = ''
-    while i < 100:
-        id = i + 1
-        nombre = fake.name()
-        direccion = fake.address()
-        rif = random.randint(10000000,99999999)
-        ciudad_id = random.randint(1,4)
-        tmp = f"INSERT INTO clientes (id, nombre, direccion, rif, ciudad_id) VALUES ({id}, '{nombre}', '{direccion}', {rif}, {ciudad_id});\n"
-        contenido = contenido + tmp
-        i = i + 1
-    with open('inserts_clientes.sql', 'w', encoding='utf-8') as archivo:
-        archivo.write(contenido)
-
-#def llenar_facturas():
-    i = 0
-    contenido = ''
-    fecha_inicio = datetime(2022, 1, 1)
-    fecha_fin = datetime(2023, 12, 31)
-    while i < 1000:
-        id = i + 1
-        numero = 100000 + id
-        cliente_id = random.randint(1,100)
-        fecha_aleatoria = fake.date_time_between(start_date=fecha_inicio, end_date=fecha_fin)
-        fecha = fecha_aleatoria.strftime('%Y-%m-%d %H:%M:%S')
-        tmp = f"INSERT INTO facturas (id, fecha, cliente_id, numero) VALUES ({id}, '{str(fecha)}', {cliente_id}, {numero});\n"
-        contenido = contenido + tmp
-        i = i + 1
-    with open('inserts_facturas.sql', 'w', encoding='utf-8') as archivo:
-        archivo.write(contenido)
-
-# llenar_productos()
-#def llenar_facturas_productos():
-    count_facturas =1000
-    count_productos = 32
-    i = 1
-    contenido = ''
-    i = 0
-    id = 1
-
-    while i < count_facturas:
-        n_productos = random.randint(1,32)
-        k = 0
-        
-        lista_productos_ids = []
-
-        while k < n_productos:
-            tmp = random.randint(1,count_productos)
-            if tmp not in lista_productos_ids:
-                lista_productos_ids.append(tmp)
-            k = k+1
-        for producto_id in lista_productos_ids:
-            cantidad = random.randint(1,20)
-            factura_id = i+1
-            tmp = f" INSERT INTO facturas_productos (id,cantidad, producto_id, factura_id) VALUES ({id}, '{cantidad}', '{producto_id}','{factura_id}');\n"
-            contenido = contenido + tmp
-        i = i+1
-    with open('inserts_facturas_productos.sql', 'w', encoding='utf-8') as archivo:
-        archivo.write(contenido)
-
-# llenar_clientes()
-#llenar_facturas_productos()
-#llenar_facturas()
-
 periodosinicioporseccion = [] #la posicion del periodo es la id de la seccion +1}
 
 idactividadesgrupales = []
@@ -184,19 +99,47 @@ def llenar_secciones():
     with open('inserts_secciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)    
 
+gruposeccion = {}
+
 def llenar_grupos():
     i = 0
     contenido = ''
-    while i < 100:
-        id = 1 +i
-        codigo = random.randint(10000,50000)
-        nombre = fake.language_name()
-        seccion_id = random.randint(1,100)
-        tmp = f"INSERT INTO grupos (id, codigo, nombre, seccion_id) VALUES ({id}, {codigo}, '{nombre}', {seccion_id});\n"
-        contenido= contenido+tmp
-        i = i + 1
+    seccionyausadas = set()
+    id = 0
+
+    while i < 30:
+        gruposporseccion = 4
+        k = 0
+        gruposparaseccion = []
+
+        while k < gruposporseccion:
+            gruposparaseccion.append(id + 1)
+            id += 1
+            k += 1
+
+        # Asegurarse de que cada sección se use solo una vez
+        seccion_id = random.randint(1, 100)
+        while seccion_id in seccionyausadas:
+            seccion_id = random.randint(1, 100)
+        seccionyausadas.add(seccion_id)
+
+        for grupoid in gruposparaseccion:
+            codigo = random.randint(10000, 50000)
+            nombre = fake.language_name()
+            tmp = f"INSERT INTO grupos (id, codigo, nombre, seccion_id) VALUES ({grupoid}, {codigo}, '{nombre}', {seccion_id});\n"
+            contenido += tmp
+
+        # Asignar los grupos generados a la sección
+        gruposeccion[seccion_id] = gruposparaseccion
+
+        # Incrementar el contador fuera del bucle `for`
+        i += 1
+
     with open('inserts_grupos.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
+
+
+
 
 def llenar_organizaciones():
     i = 0
@@ -228,27 +171,44 @@ def llenar_actividades_tipo():
     with open('inserts_actividades_tipo.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
+actividadesporseccion = {}
+
 def llenar_actividades():
+    count_secciones = 100
     i = 0
     contenido = ''
-    while i < 100:
-        id = 1 +i
-        nombre = fake.job()
-        fecha_publicacion = fake.date_time_between(start_date=datetime(2020, 1, 1), end_date='now')
-        fecha_entrega = fecha_publicacion + timedelta(days=15)
-        detalles = fake.paragraph()
-        tipo_id = random.randint(1,2) 
-        if (tipo_id ==2): {
-            idactividadesgrupales.append(id)
-        }
-        else:{
-            idactividadesindividuales.append(id)
-        }
-        tmp = f"INSERT INTO actividades (id, nombre, fecha_publicacion, fecha_entrega, detalles, tipo_id) VALUES ({id}, '{nombre}', '{fecha_publicacion}', '{fecha_entrega}', '{detalles}', {tipo_id});\n"
-        contenido= contenido+tmp
-        i = i + 1
-    with open('inserts_actividades.sql', 'w', encoding='utf-8') as archivo:
+    actividadesyausadas = set()
+    id = 0
+    while i < count_secciones:
+        cantidadactivdadporseccion = 4
+        k = 0
+        listaactividadesid = []
+        while k < cantidadactivdadporseccion:
+            tmp = random.randint(1, 400)
+            while tmp in actividadesyausadas:
+                tmp = random.randint(1, 400)
+            actividadesyausadas.add(tmp)
+            if tmp not in listaactividadesid:
+                listaactividadesid.append(tmp)
+            k += 1
+        actividadesporseccion[i + 1] = listaactividadesid
+        for actividad_id in listaactividadesid:
+            seccion_id = i + 1
+            nombre = fake.job()
+            fecha_publicacion = fake.date_time_between(start_date=datetime(2020, 1, 1), end_date='now')
+            fecha_entrega = fecha_publicacion + timedelta(days=15)
+            detalles = fake.paragraph()
+            tipo_id = random.randint(1, 2)
+            if tipo_id == 2:
+                idactividadesgrupales.append(actividad_id)
+            else:
+                idactividadesindividuales.append(actividad_id)
+            tmp = f"INSERT INTO actividades (id, nombre, fecha_publicacion, fecha_entrega, detalles, tipo_id, seccion_id) VALUES ({actividad_id}, '{nombre}', '{fecha_publicacion}', '{fecha_entrega}', '{detalles}', {tipo_id}, {seccion_id});\n"
+            contenido += tmp
+        i += 1
+    with open('inserts_actividades_secciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
+
 
 def llenar_estudiantes():
     i = 0
@@ -273,6 +233,7 @@ def llenar_estudiantes():
 
 estudiantes_por_seccion = {}
 
+
 def llenar_estudiantes_secciones():
     count_estudiantes = 1000
     count_secciones = 100
@@ -281,72 +242,93 @@ def llenar_estudiantes_secciones():
     id = 1
     while i < count_secciones:
         n_estudiantes = random.randint(10, 30)
-        k = 0
         lista_estudiantes_ids = []
-        while k < n_estudiantes:
+        while len(lista_estudiantes_ids) < n_estudiantes:
             tmp = random.randint(1, count_estudiantes)
             if tmp not in lista_estudiantes_ids:
                 lista_estudiantes_ids.append(tmp)
-            k += 1
-        estudiantes_por_seccion[i + 1] = lista_estudiantes_ids
+        listaestudianteseccion = []
         for estudiante_id in lista_estudiantes_ids:
             seccion_id = i + 1
             tmp = f"INSERT INTO estudiantes_secciones (id, estudiante_id, seccion_id) VALUES ({id}, {estudiante_id}, {seccion_id});\n"
             contenido += tmp
+            listaestudianteseccion.append(id)
             id += 1
+        estudiantes_por_seccion[seccion_id] = listaestudianteseccion
         i += 1
     with open('inserts_estudiantes_secciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
+
+
 estdiantes_por_grupo = {}
 
+
 def llenar_estudiantes_seccion_grupo():
-    count_estudiantes_seccion = 1000
-    count_grupos = 100
-    i = 0
+    count_seccioncongrupos = len(gruposeccion)
     contenido = ''
     id = 1
-    while i < count_grupos:
-        seccion_id = (i % len(estudiantes_por_seccion)) + 1
-        n_estudiantes = 5  
-        k = 0
-        lista_estudiantes_seccion_ids = []
+    secciones_usadas = set()
+
+    for _ in range(count_seccioncongrupos):
+        seccion_id = random.choice(list(gruposeccion.keys()))
+        
+        while seccion_id in secciones_usadas:
+            seccion_id = random.choice(list(gruposeccion.keys()))
+        
+        secciones_usadas.add(seccion_id)
+        gruposenlaseccion = gruposeccion[seccion_id]
         estudiantes_disponibles = estudiantes_por_seccion[seccion_id]
-        while k < n_estudiantes:
-            tmp = random.choice(estudiantes_disponibles)
-            if tmp not in lista_estudiantes_seccion_ids:
-                lista_estudiantes_seccion_ids.append(tmp)
-            k += 1
-        estdiantes_por_grupo[i+1] = lista_estudiantes_seccion_ids
-        for estudiante_seccion_id in lista_estudiantes_seccion_ids:
-            grupo_id = i + 1
-            tmp = f"INSERT INTO estudiantes_seccion_grupo (id, estudiante_seccion_id,grupo_id) VALUES ({id},{estudiante_seccion_id},  {grupo_id});\n"
-            contenido += tmp
-            id += 1
-        i += 1
+
+        for grupo_id in gruposenlaseccion:
+            idestudiantesparaelgrupo = []
+            
+            while len(idestudiantesparaelgrupo) < 5:
+                tmp = random.choice(estudiantes_disponibles)
+                if tmp not in idestudiantesparaelgrupo:
+                    idestudiantesparaelgrupo.append(tmp)
+            ideestudiantesgruapl = []	
+
+            for estudiante_seccion_id in idestudiantesparaelgrupo:
+                tmp = f"INSERT INTO estudiantes_seccion_grupo (id, estudiante_seccion_id, grupo_id) VALUES ({id}, {estudiante_seccion_id}, {grupo_id});\n"
+                contenido += tmp
+                id += 1
+                ideestudiantesgruapl.append(id)
+            estdiantes_por_grupo[grupo_id] = ideestudiantesgruapl
+        
     with open('inserts_estudiantes_secciones_grupo.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
-
+def encontrar_llave_por_elemento(diccionario, elemento): 
+    for clave, lista in diccionario.items():
+        if elemento in lista:
+            return clave 
+    return None
 
 
 def llenar_calificaciones_grupales():
-    count_estudiantes_seccion_grupo = 100
-    count_actividades = len(idactividadesgrupales)
+    count_actividadesgrupales = 100
+    count_actividades = 400
     contenido = ''
     id = 1
     i=0
-    while i < count_actividades:
-        grupo_id = (i % len(estdiantes_por_grupo)) + 1
+    gruposyarellenos = []
+    while i < 120:
+        grupo_id = i+1
+        gruposyarellenos.append(grupo_id)
         n_estudiantes = 4
         k = 0
         lista_estudiantes_seccion_grupo_ids = estdiantes_por_grupo[grupo_id]
-        for estudiante_seccion_grupo_id in lista_estudiantes_seccion_grupo_ids:
-            actividad_id = idactividadesgrupales[i]
-            nota = random.randint(0, 20)
-            tmp = f"INSERT INTO calificaciones_grupales (id, estudiante_seccion_grupo_id, actividad_id, nota) VALUES ({id}, {estudiante_seccion_grupo_id}, {actividad_id}, {nota});\n"
-            contenido += tmp
-            id += 1
+        seccion_id = encontrar_llave_por_elemento(gruposeccion, grupo_id)
+        actividadesdisponibles = actividadesporseccion[seccion_id]
+        actividadesgrupalesseccion = [actividad for actividad in actividadesdisponibles if actividad in idactividadesgrupales]
+        for actividad_id in actividadesgrupalesseccion: #4
+            for estudiante_seccion_grupo_id in lista_estudiantes_seccion_grupo_ids: #4
+                nota = random.randint(0, 20)
+                tmp = f"INSERT INTO calificaciones_grupales (id, estudiante_seccion_grupo_id, actividad_id, nota) VALUES ({id}, {estudiante_seccion_grupo_id}, {actividad_id}, {nota});\n"
+                contenido += tmp
+                print(tmp)
+                id += 1
         i += 1
     with open('inserts_calificaciones_grupales.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
@@ -360,14 +342,14 @@ def llenar_calificaciones_individuales():
     while i < count_actividades:
         seccion_id = (i % len(estudiantes_por_seccion)) + 1
         estudiantes_disponibles = estudiantes_por_seccion[seccion_id]
-        k = 0
-        lista_estudiantes_seccion_ids = []
-        for estudiante_seccion_id in estudiantes_disponibles:
-            actividad_id = idactividadesindividuales[i]
-            nota = random.randint(0, 20)
-            tmp = f"INSERT INTO calificaciones_individuales (id, estudiante_seccion_id, actividad_id, nota) VALUES ({id}, {estudiante_seccion_id}, {actividad_id}, {nota});\n"
-            contenido += tmp
-            id += 1
+        actividadesdisponibles = actividadesporseccion[seccion_id]
+        actividadesindividualesseccion = [actividad for actividad in actividadesdisponibles if actividad in idactividadesindividuales] 
+        for actividad_id in actividadesindividualesseccion:
+            for estudiante_id in estudiantes_disponibles:
+                nota = random.randint(0, 20)
+                tmp = f"INSERT INTO calificaciones_individuales (id, estudiante_seccion_id, actividad_id, nota) VALUES ({id}, {estudiante_id}, {actividad_id}, {nota});\n"
+                contenido += tmp
+                id += 1
         i += 1
     with open('inserts_calificaciones_individuales.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
@@ -430,7 +412,7 @@ def llenar_contenidos_curso():
     contenido = ''
     while id < 100:
         id = id + 1
-        seccion_id = id+1
+        seccion_id = id
         zoom = "https://zoom.us/join?confno=" + str(random.randint(1000000000, 9999999999))
         tmp = f"INSERT INTO contenidos_curso (id, seccion_id, zoom) VALUES ({id}, {seccion_id}, '{zoom}');\n"
         contenido += tmp
@@ -491,27 +473,29 @@ def llenar_estudiantes_organizaciones():
     with open('inserts_estudiantes_organizaciones.sql', 'w', encoding='utf-8') as archivo:
         archivo.write(contenido)
 
-llenar_sexos()
-llenar_usuarios()
-llenar_cursos()
-llenar_periodos()
-llenar_profesores()
-llenar_secciones()
-llenar_grupos()
-llenar_organizaciones()
-llenar_actividades()
-llenar_estudiantes()
-llenar_estudiantes_secciones()
-llenar_estudiantes_seccion_grupo()
-llenar_actividades_tipo()
-llenar_calificaciones_grupales()
-llenar_calificaciones_individuales()
+#llenar_sexos()
+#llenar_usuarios()
+#llenar_cursos()
+#llenar_periodos()
+#llenar_profesores()
+#llenar_secciones()
+#llenar_grupos()
+#llenar_organizaciones()
+#llenar_actividades()
+#llenar_estudiantes()
+#llenar_estudiantes_secciones()
+#llenar_estudiantes_seccion_grupo()
+#llenar_actividades_tipo()
 
-llenar_anuncios()
-llenar_mensajes()
-llenar_destinatarios_mensajes()
+
+#llenar_calificaciones_grupales()
+#llenar_calificaciones_individuales()
+
+#llenar_anuncios()
+#llenar_mensajes()
+#llenar_destinatarios_mensajes()
 llenar_contenidos_curso()
-llenar_informacion_recursos_comunes()
-llenar_documentos()
-llenar_estudiantes_organizaciones()
+#llenar_informacion_recursos_comunes()
+#llenar_documentos()
+#llenar_estudiantes_organizaciones()
 
